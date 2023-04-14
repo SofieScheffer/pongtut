@@ -12,7 +12,7 @@ namespace Tutorial
 
         private SpriteFont textfont;
         private Vector2 textPos;
-        private const string TextMsg = "Welcome To My Bouncer";
+        private const string TextMsg = "Bounced";
 
         private const int ScreenW = 1600;
         private const int ScreenH = 900;
@@ -25,7 +25,7 @@ namespace Tutorial
         private Texture2D PaddleText;
         private Rectangle PaddleRect;
         private KeyboardState kb;
-        private const int speed = 7;
+        private int speed;
         private float vX;
         private float vY;
         private int count;
@@ -50,6 +50,7 @@ namespace Tutorial
             vX = 30f;
             vY = 50f;
             count = 0;
+            speed = 8;
 
             base.Initialize();
         }
@@ -58,16 +59,16 @@ namespace Tutorial
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            bg = Content.Load<Texture2D>("Textures/background");
+            bg = Content.Load<Texture2D>("Textures/Achtergrond");
             bgRect = new Rectangle(0, 0, graphics.GraphicsDevice.Viewport.Width, graphics.GraphicsDevice.Viewport.Height);
 
             textfont = Content.Load<SpriteFont>("Fonts/Textfont");
             textPos = new Vector2(0,10);
 
-            BallText = Content.Load<Texture2D>("Textures/ball");
-            BallRect = new Rectangle(500, 500, BallText.Width/2, BallText.Height/2);
+            BallText = Content.Load<Texture2D>("Textures/Sterr");
+            BallRect = new Rectangle(500, 500, BallText.Width, BallText.Height);
 
-            PaddleText = Content.Load<Texture2D>("Textures/paddle");
+            PaddleText = Content.Load<Texture2D>("Textures/paddleGroen");
             PaddleRect = new Rectangle(500, 800, PaddleText.Width, PaddleText.Height);
 
         }
@@ -75,7 +76,7 @@ namespace Tutorial
         protected override void Update(GameTime gameTime)
         {
 
-            if (BallRect.Bottom > graphics.GraphicsDevice.Viewport.Height)
+            if (BallRect.Top > graphics.GraphicsDevice.Viewport.Height)
             {
                 kb = Keyboard.GetState();
                 if (kb.IsKeyDown(Keys.Escape))
@@ -98,6 +99,8 @@ namespace Tutorial
                 {
                     vY = -vY;
                     count += 1;
+                    if (count > 0 && count % 5 == 0)
+                        speed += 2;
                 }
                 BallRect.Y -= (int)(speed * vY * gameTime.ElapsedGameTime.Milliseconds / 1000f);
 
